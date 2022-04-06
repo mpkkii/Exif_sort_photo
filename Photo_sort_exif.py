@@ -79,10 +79,10 @@ def main():
                 f'Введите режим обработки: '))
     
     # указываем папку для поиска и обработки фото
-    path_input = input("Введите путь для обрабатываемой папки: ") #'D:\\Port\\projekt\\Exif_photo_sort\\test_photo'        
+    path_input = input("Введите путь для обрабатываемой папки: ")      
 
     # указываем папку для сохранения результат
-    path_out = input("Введите путь для сохранения фото: ") #'D:\\Port\\projekt\\Exif_photo_sort\\test_out'   
+    path_out = input("Введите путь для сохранения фото: ") 
     sort_photo(path_input, path_out, mode_parse) #
 
 
