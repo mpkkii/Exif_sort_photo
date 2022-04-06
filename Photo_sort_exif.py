@@ -46,7 +46,7 @@ def create_path_win(image, path_out, mode = 1):
 
 def sort_photo(path_input, path_out, mode_parse): #
     # указываем расширения файлов для поиска и обработки
-    type_file = ('jpg','JPG','NEF', 'nef', 'RAW', 'raw')
+    type_file = ('jpg','JPG','NEF', 'nef', 'RAW', 'raw', 'PNG', 'png')
     # в цикле собираем все файлы и дириктории
     for i in os.walk(path_input):
         # вытаскивает название файла из полного пути
@@ -55,18 +55,20 @@ def sort_photo(path_input, path_out, mode_parse): #
             if image.endswith(type_file):
                 image = (i[0]+'\\'+image)
                 # открываем файл для считывания EXIF
-                with open(image, 'rb') as image_file:
-                    img_date = Image(image_file)
-                
-                # # Если информация о дате съемке присутсвует то обрабатываем
                 try:
-                    if img_date.get('datetime')!= None:
-                        create_move(create_path_exif(img_date, path_out, mode_parse), image)
-                    elif getmtime(image):
-                            create_move(create_path_win(image, path_out, mode_parse), image)
-                except:
-                    print(f'{image} не содержит даты')
-                    continue
+                    with open(image, 'rb') as image_file:
+                        img_date = Image(image_file)
+                    if img_date.has_exif:
+                # # Если информация о дате съемке присутсвует то обрабатываем
+                        if img_date.get('datetime')!= None:
+                            create_move(create_path_exif(img_date, path_out, mode_parse), image)
+                except Exception as e:
+                    print(f'{e} хз что не так {image}')  
+                    
+                finally:
+                    create_move(create_path_win(image, path_out, mode_parse), image) 
+                
+                    
 
 def main():
     mode_parse = int(input(f'выбор режима раскладывания по каталогам \n'
@@ -83,5 +85,8 @@ def main():
     path_out = input("Введите путь для сохранения фото: ") #'D:\\Port\\projekt\\Exif_photo_sort\\test_out'   
     sort_photo(path_input, path_out, mode_parse) #
 
+
+if __name__ == "__main__":
+    main()
 
 
