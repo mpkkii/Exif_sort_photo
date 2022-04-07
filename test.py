@@ -32,7 +32,7 @@ def list_files(path_input):
     return list_file
 
 
-def take_name_date(list_file):    
+def take_name_date(list_file:list):    
     for image in list_file:
         data = dt.fromtimestamp(getmtime(image)).strftime('%Y, %m')
         print(f'{image} создан: {data}')
