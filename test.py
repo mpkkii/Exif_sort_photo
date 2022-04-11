@@ -1,6 +1,6 @@
 import os
 import hashlib
-from exif import Image
+from PIL import Image
 from os.path import getmtime
 from datetime import datetime as dt
 import shutil
@@ -11,15 +11,9 @@ from os import path
 
 
 
+
 def list_files(path_input):
-    """_summary_
 
-    Args:
-        path_input (str): путь до обрабатываемой папки
-
-    Returns:
-        list: список всех путей до файлов
-    """
     #типы файлов для поиска
     type_file = ('jpg','JPG','NEF', 'nef', 'RAW', 'raw', 'PNG', 'png')
     # список полных путей до файла
@@ -44,15 +38,32 @@ def take_size_file(list_file:list):
         size = os.stat(image).st_size
         print(f'File Size in Bytes is {size} : {image}')
        
+def take_MD5(list_file:list):
+    for image in list_file:
+        md5hash = hashlib.md5(Image.open(image).tobytes())
+        print(md5hash.hexdigest(), image)
 
-
+def remove_empty_dir(path_input:str ):
+    all_dir = []
+    for i in os.walk(path_input):
+        all_dir.insert(0,i)
+    for dir in all_dir:
+        if dir[-1] == [] and dir[-2] == []:
+            os.removedirs(dir[0])
+        else:
+            print(f'В папке {dir} имеются файлы отличные от изображений')
+            continue
+        
 
 
 
 def main():
     path_input = input("Введите путь для обрабатываемой папки: ")
-    #take_name_date(list_files(path_input))
-    take_size_file(list_files(path_input))
+    take_name_date(list_files(path_input))
+    #take_MD5(list_files(path_input))
+    #remove_empty_dir(path_input)
+    
+    
 
 
 if __name__ == "__main__":

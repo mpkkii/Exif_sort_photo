@@ -1,4 +1,5 @@
 import os
+import re
 from exif import Image
 from os.path import getmtime
 from datetime import datetime as dt
@@ -14,9 +15,30 @@ def create_move(path, image):
         if os.stat(image).st_size == os.stat(path + "\\" + image.split("\\")[-1]).st_size:
             new_path = path + "\\" + (image.split("\\")[-1]).split('.')[-2] + '_copy_.' + (image.split("\\")[-1]).split('.')[-1]
             shutil.move(image, new_path )
-        print(f'{image} сохранен как {new_path}')
+            print(f'{image} сохранен как {new_path}')
+        elif os.stat(image).st_size != os.stat(path + "\\" + image.split("\\")[-1]).st_size:
+            new_path = path + "\\" + (image.split("\\")[-1]).split('.')[-2] + '_offsize_.' + (image.split("\\")[-1]).split('.')[-1]
+            shutil.move(image, new_path )
+            print(f'{image} сохранен как {new_path}')
+            
+            
+def remove_empty_dir(path_input:str, del_mode:int ):
+    if del_mode == 1:
+        all_dir = []
+        for i in os.walk(path_input):
+            all_dir.insert(0,i)
+        for dir in all_dir:
+            if dir[-1] == []:
+                os.removedirs(dir[0])
+            else:
+                print(f'В папке {dir} имеются файлы отличные от изображений')
+                continue
+    elif del_mode != 0:
+        print(f'Выбран неверный режим удаления {del_mode}, '
+              f'Пакпи небыли удалены') 
+          
 
-def create_path_exif(img_date, path_out, mode=1):
+def create_path_exif(img_date, path_out, mode):
     path_year = path_out + '\\' + ((str(img_date.get('datetime'))).split()[0]).split(':')[0]
     path_month = path_year + '\\' + ((str(img_date.get('datetime'))).split()[0]).split(':')[1]
     path_day = path_month + '\\' + ((str(img_date.get('datetime'))).split()[0]).split(':')[2]
@@ -30,10 +52,10 @@ def create_path_exif(img_date, path_out, mode=1):
         elif mode ==4:
             return path_day
     except:
-        print(f"Введty неверный режим работы, {mode} - недопустимое значение")
+        print(f"Введён неверный режим работы, {mode} - недопустимое значение")
 
 
-def create_path_win(image, path_out, mode = 1):
+def create_path_win(image, path_out, mode):
     path_year = path_out + '\\' + (dt.fromtimestamp(getmtime(image)).strftime('%Y'))
     path_month = path_year + '\\' + (dt.fromtimestamp(getmtime(image)).strftime('%m'))
     path_day = path_month + '\\' + (dt.fromtimestamp(getmtime(image)).strftime('%d'))
@@ -47,7 +69,7 @@ def create_path_win(image, path_out, mode = 1):
         elif mode ==4:
             return path_day
     except:
-        print(f"Введty неверный режим работы, {mode} - недопустимое значение")
+        print(f"Введён неверный режим работы, {mode} - недопустимое значение")
 
 
 def sort_photo(path_input, path_out, mode_parse): #
@@ -69,12 +91,14 @@ def sort_photo(path_input, path_out, mode_parse): #
                         if img_date.get('datetime')!= None:
                             create_move(create_path_exif(img_date, path_out, mode_parse), image)
                 except Exception as e:
-                    print(f'{e} хз что не так {image}')  
-                    
+                    print(f'{e} хз что не так {image}')
                 finally:
-                    create_move(create_path_win(image, path_out, mode_parse), image) 
-                
-                    
+                    create_move(create_path_win(image, path_out, mode_parse), image)
+    
+
+                     
+                                                   
+
 
 def main():
     mode_parse = int(input(f'выбор режима раскладывания по каталогам \n'
@@ -83,13 +107,17 @@ def main():
                 f'3- в папке с годами создает папку с месяцем\n'
                 f'4- в папке с годами создает папку с месяцем и в ней разбивка по дням\n'
                 f'Введите режим обработки: '))
-    
+    del_mode = int(input(f"Режим удаления пустых папок после перемещния фото \n"
+                        f'1- удаляет все пустые папки\n'
+                        f'0- папки не удаляются \n'
+                        f'Введите режим удаления: '))
     # указываем папку для поиска и обработки фото
     path_input = input("Введите путь для обрабатываемой папки: ")      
 
     # указываем папку для сохранения результат
     path_out = input("Введите путь для сохранения фото: ") 
-    sort_photo(path_input, path_out, mode_parse) #
+    sort_photo(path_input, path_out, mode_parse) 
+    
 
 
 if __name__ == "__main__":
