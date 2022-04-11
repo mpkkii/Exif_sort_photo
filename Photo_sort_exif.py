@@ -7,7 +7,12 @@ from os import path
 
 def create_move(path, image):
     os.makedirs(path,exist_ok=True)
-    shutil.move(image, path)
+    try:
+        shutil.move(image, path)
+    except Exception as e:
+        print(f'{image} по пути {path} существует')
+        if os.stat(image).st_size == os.stat(path + "\\" + image.split("\\")[-1]).st_size:
+            shutil.move(image, path + "\\" + (image.split("\\")[-1]).split('.')[-2] + '_copy.' + (image.split("\\")[-1]).split('.')[-1])
 
 
 def create_path_exif(img_date, path_out, mode=1):

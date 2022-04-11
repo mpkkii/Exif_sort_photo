@@ -1,9 +1,11 @@
 import os
+import hashlib
 from exif import Image
 from os.path import getmtime
 from datetime import datetime as dt
 import shutil
 from os import path
+
 
 
 
@@ -37,10 +39,20 @@ def take_name_date(list_file:list):
         data = dt.fromtimestamp(getmtime(image)).strftime('%Y, %m')
         print(f'{image} создан: {data}')
 
+def take_size_file(list_file:list):
+    for image in list_file:
+        size = os.stat(image).st_size
+        print(f'File Size in Bytes is {size} : {image}')
+       
+
+
+
+
 
 def main():
     path_input = input("Введите путь для обрабатываемой папки: ")
-    take_name_date(list_files(path_input))
+    #take_name_date(list_files(path_input))
+    take_size_file(list_files(path_input))
 
 
 if __name__ == "__main__":
