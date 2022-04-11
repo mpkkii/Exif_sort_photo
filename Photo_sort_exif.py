@@ -12,8 +12,9 @@ def create_move(path, image):
     except Exception as e:
         print(f'{image} по пути {path} существует')
         if os.stat(image).st_size == os.stat(path + "\\" + image.split("\\")[-1]).st_size:
-            shutil.move(image, path + "\\" + (image.split("\\")[-1]).split('.')[-2] + '_copy.' + (image.split("\\")[-1]).split('.')[-1])
-
+            new_path = path + "\\" + (image.split("\\")[-1]).split('.')[-2] + '_copy_.' + (image.split("\\")[-1]).split('.')[-1]
+            shutil.move(image, new_path )
+        print(f'{image} сохранен как {new_path}')
 
 def create_path_exif(img_date, path_out, mode=1):
     path_year = path_out + '\\' + ((str(img_date.get('datetime'))).split()[0]).split(':')[0]
