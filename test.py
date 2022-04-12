@@ -59,9 +59,9 @@ def remove_empty_dir(path_input:str ):
 
 def main():
     path_input = input("Введите путь для обрабатываемой папки: ")
-    take_name_date(list_files(path_input))
+    #take_name_date(list_files(path_input))
     #take_MD5(list_files(path_input))
-    #remove_empty_dir(path_input)
+    remove_empty_dir(path_input)
     
     
 
