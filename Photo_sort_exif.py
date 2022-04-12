@@ -1,14 +1,8 @@
-from itertools import count
 import os
 import shutil
-from sre_parse import State
 from exif import Image
 from os.path import getmtime
 from datetime import datetime as dt
-from progress.bar import Bar
-
-
-
 
 
 def create_move(path, image):
@@ -38,6 +32,8 @@ def remove_empty_dir(path_input:str, del_mode:int ):
             else:
                 #print(f'В папке {dir} имеются файлы отличные от изображений')
                 continue
+
+        
     elif del_mode != 0:
         print(f'Выбран неверный режим удаления {del_mode}, '
               f'Пакпи небыли удалены')
@@ -124,16 +120,12 @@ def main():
     # указываем папку для сохранения результат
     path_out = input("Введите путь для сохранения фото: ")
 
-    while sort_photo(path_input, path_out, mode_parse, del_mode):
-        with Bar('Processing') as bar:
-            for i in range(20):
-        # Do some work
-                bar.next()
+    sort_photo(path_input, path_out, mode_parse, del_mode)
 
-    
     print('Все готово!')
     
-
+    input('Нажми ENTER для выхода') 
+    
 
 if __name__ == "__main__":
     main()
