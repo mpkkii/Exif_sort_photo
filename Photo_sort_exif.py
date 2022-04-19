@@ -1,8 +1,7 @@
 import os
-from re import M
 import shutil
 from exif import Image
-from os.path import getmtime
+from os.path import getmtime, getctime
 from datetime import datetime as dt
 
 
@@ -105,8 +104,8 @@ def sort_photo(path_input, path_out, mode_parse, del_mode):
                 # # Если информация о дате съемке присутсвует то обрабатываем
                         if img_date.get('datetime')!= None:
                             create_move(create_path_exif(img_date, path_out, mode_parse), image)
-                    else:
-                        create_move(create_path_win(image, path_out, mode_parse), image)
+                        else:
+                            create_move(create_path_win(image, path_out, mode_parse), image)
                         
                 except Exception as e:
                     print(f'{e} хз что не так {image}')

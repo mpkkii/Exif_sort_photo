@@ -1,6 +1,6 @@
 import os
 import hashlib
-from PIL import Image
+#from PIL import Image
 from os.path import getmtime
 from datetime import datetime as dt
 import shutil
@@ -30,7 +30,7 @@ def list_files(path_input):
 
 def take_name_date(list_file:list):    
     for image in list_file:
-        data = dt.fromtimestamp(getmtime(image)).strftime('%Y, %m')
+        data = dt.fromtimestamp(getmtime(image)).strftime('%Y, %m, %d')
         print(f'{image} создан: {data}')
 
 def take_size_file(list_file:list):
@@ -59,9 +59,9 @@ def remove_empty_dir(path_input:str ):
 
 def main():
     path_input = input("Введите путь для обрабатываемой папки: ")
-    #take_name_date(list_files(path_input))
+    take_name_date(list_files(path_input))
     #take_MD5(list_files(path_input))
-    remove_empty_dir(path_input)
+    #remove_empty_dir(path_input)
     
     
 
