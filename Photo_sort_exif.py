@@ -1,4 +1,5 @@
 import os
+from re import M
 import shutil
 from exif import Image
 from os.path import getmtime
@@ -42,12 +43,17 @@ def remove_empty_dir(path_input:str, del_mode:int ):
           
 
 def create_path_exif(img_date, path_out, mode):
-    path_year = path_out + '\\' + ((str(img_date.get('datetime'))).split()[0]).split(':')[0]
-    path_month = path_year + '\\' + ((str(img_date.get('datetime'))).split()[0]).split(':')[1]
-    path_day = path_month + '\\' + ((str(img_date.get('datetime'))).split()[0]).split(':')[2]
+    y = ((str(img_date.get('datetime'))).split()[0]).split(':')[0]
+    m = ((str(img_date.get('datetime'))).split()[0]).split(':')[1]
+    d = ((str(img_date.get('datetime'))).split()[0]).split(':')[2]
+    
+    path_out_new = path_out + '\\' + y + '-' + m + '-' + d
+    path_year = path_out + '\\' + y + '-' + m + '\\' + d
+    path_month = path_out + '\\' + y + '\\' + m + '-' + d
+    path_day = path_out + '\\' + y + '\\' + m + '\\' + d
     try:
         if mode ==1:
-            return path_out
+            return path_out_new
         elif mode ==2:
             return path_year
         elif mode ==3:
@@ -59,12 +65,18 @@ def create_path_exif(img_date, path_out, mode):
 
 
 def create_path_win(image, path_out, mode):
-    path_year = path_out + '\\' + (dt.fromtimestamp(getmtime(image)).strftime('%Y'))
-    path_month = path_year + '\\' + (dt.fromtimestamp(getmtime(image)).strftime('%m'))
-    path_day = path_month + '\\' + (dt.fromtimestamp(getmtime(image)).strftime('%d'))
+    y = (dt.fromtimestamp(getmtime(image)).strftime('%Y'))
+    m = (dt.fromtimestamp(getmtime(image)).strftime('%m'))
+    d = (dt.fromtimestamp(getmtime(image)).strftime('%d'))
+    
+    
+    path_out_new = path_out + '\\' + y + '-' + m + '-' + d
+    path_year = path_out + '\\' + y + '-' + m + '\\' + d
+    path_month = path_out + '\\' + y + '\\' + m + '-' + d
+    path_day = path_out + '\\' + y + '\\' + m + '\\' + d
     try:
         if mode ==1:
-            return path_out
+            return path_out_new
         elif mode ==2:
             return path_year
         elif mode ==3:
@@ -105,10 +117,10 @@ def sort_photo(path_input, path_out, mode_parse, del_mode):
    
 def main():
     mode_parse = int(input(f'выбор режима раскладывания по каталогам \n'
-                f'1- все в кучу (в папку path_out)\n'
-                f'2- создает папку с годами и раскладывает на основе полученной информации\n'
-                f'3- в папке с годами создает папку с месяцем\n'
-                f'4- в папке с годами создает папку с месяцем и в ней разбивка по дням\n'
+                f'1- формат папки YYYY-MM-DD \n'
+                f'2- формат папки YYYY-MM//DD\n'
+                f'3- формат папки YYYY//MM-DD\n'
+                f'4- формат папки YYYY//MM//DD\n'
                 f'Введите режим обработки: '))
     del_mode = int(input(f"Режим удаления пустых папок после перемещния фото \n"
                         f'0- папки не удаляются\n'
