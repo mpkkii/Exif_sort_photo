@@ -100,15 +100,14 @@ def sort_photo(path_input, path_out, mode_parse, del_mode):
                 try:
                     with open(image, 'rb') as image_file:
                         img_date = Image(image_file)
-                    if img_date.has_exif:
+                    if img_date.has_exif and img_date.get('datetime')!= None:
                 # # Если информация о дате съемке присутсвует то обрабатываем
-                        if img_date.get('datetime')!= None:
-                            create_move(create_path_exif(img_date, path_out, mode_parse), image)
-                        else:
-                            create_move(create_path_win(image, path_out, mode_parse), image)
+                        create_move(create_path_exif(img_date, path_out, mode_parse), image)
+                    else:
+                        create_move(create_path_win(image, path_out, mode_parse), image)
                         
                 except Exception as e:
-                    print(f'{e} хз что не так {image}')
+                    print(f'{e} Error File! {image}')
                     create_move(create_path_win(image, path_out, mode_parse), image)       
 
     remove_empty_dir(path_input, del_mode)
